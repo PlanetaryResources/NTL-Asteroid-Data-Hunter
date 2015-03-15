@@ -1,0 +1,37 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans      http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+<bean id="logger" class="org.apache.log4j.Logger" factory-method="getLogger">
+	<constructor-arg type="java.lang.String" value="ROOT" />
+</bean>
+
+	<bean id="helpService" class="gov.nasa.asteroid.hunter.services.impl.HelpServiceImpl">
+		<property name="logger" ref="logger" />
+	</bean>
+	<bean id="neoService" class="gov.nasa.asteroid.hunter.services.impl.NEOServiceImpl">
+		<property name="logger" ref="logger" />
+		<property name="mpCheckerCGIURL"
+			value="http://scully.cfa.harvard.edu/cgi-bin/mpcheck.cgi" />
+	</bean>
+	<bean id="detectionSessionService"
+		class="gov.nasa.asteroid.hunter.services.impl.DetectionSessionServiceImpl">
+		<property name="logger" ref="logger" />
+	</bean>
+	<bean id="imageService"
+		class="gov.nasa.asteroid.hunter.services.impl.ImageServiceImpl">
+		<property name="logger" ref="logger" />
+	</bean>
+	<bean id="asteroidDetectionServiceImpl"
+		class="gov.nasa.asteroid.hunter.services.impl.AsteroidDetectionServiceImpl">
+		<property name="logger" ref="logger" />
+		<property name="neoService" ref="neoService" />
+		<property name="imageService" ref="imageService" />
+		<property name="detectionSessionService" ref="detectionSessionService" />
+		<property name="asteroidsDetectionExe" value="${detector.asteroids_detection_exe}" />
+		<property name="baseDirectory" value="${detector.base_directory}" />
+		<property name="maxNumberOfAnswers" value="${detector.max_number_of_answers}" />
+	</bean>
+	
+</beans>

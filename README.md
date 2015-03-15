@@ -1,12 +1,12 @@
 NASA's Asteroid Data Hunter
 
+Using the latest developments in machine learning algorithms, we have developed an algorithm that is capable of utilizing imagery data from modern telescopes to find more asteroids than has previously ever been possible.
 
+This new method is approximately 15% better than the current method of identifying asteroids in the main belt (Asteroids that orbit between Mars & Jupiter).
+The algorithm is capable of running on a common laptop/desktop. Algorithms like these will be used on future spacecraft to identify asteroids to maximize the capability of missions in the future.
 
-As part of this project, we built an algorithm that is capable of identifying asteroids in images from ground-based telescopes. We were able to increase the detection sensitivity, minimize the number of false positives, ignore imperfections in the data, and make it run effectively on all computers.
-
-We're currently working on phase 2 - where we're building an application that will be so easy to use, that citizen scientists, hobbyist astronomers and even professional organizations/institutions will want to download the software.
-
-The upcoming software will be open source and able to run effectively and within a reasonable amount of time on a common everyday laptop and it will contain a dead-simple user interface that anyone can use. 
+The application contains a user interface that anyone can use without too much of a learning curve for new users. It’s also easy to install and comes with a one-click installation process (no configuration necessary!). For the expert user, full documentation and source code are available for modifications and tweaking.
+- See more at: http://www.topcoder.com/asteroids/asteroiddatahunter/#sthash.Q19E7QIG.dpuf
 
 Thanks!
 -The NASA Tournament Lab

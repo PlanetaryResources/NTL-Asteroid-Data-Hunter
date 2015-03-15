@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+    <persistence-unit name="HunterPersistenceUnit" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>gov.nasa.asteroid.hunter.models.HelpTopic</class>
+        <class>gov.nasa.asteroid.hunter.models.HelpItem</class>
+        <class>gov.nasa.asteroid.hunter.models.DetectionSession</class>
+        <class>gov.nasa.asteroid.hunter.models.DetectionItem</class>
+        <class>gov.nasa.asteroid.hunter.models.DetectionItemFrame</class>
+        <class>gov.nasa.asteroid.hunter.models.ImageInfo</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <validation-mode>NONE</validation-mode>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <property name="hibernate.show_sql" value="false"/>
+        </properties>
+    </persistence-unit>
+</persistence>

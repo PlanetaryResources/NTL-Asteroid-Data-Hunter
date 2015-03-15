@@ -1,0 +1,7 @@
+.width120-ie9 {
+    width: 110px !important;
+}
+
+.asteroid-table-container table tbody td {
+    height: 42px !important;
+}

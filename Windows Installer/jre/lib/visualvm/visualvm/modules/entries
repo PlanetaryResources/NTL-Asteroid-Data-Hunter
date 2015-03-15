@@ -1,0 +1,97 @@
+10
+
+dir
+2943
+https://svn.java.net/svn/visualvm~svn/branches/release132/l10n/src/ja/visualvm
+https://svn.java.net/svn/visualvm~svn
+
+
+
+2011-02-23T15:42:56.864597Z
+2917
+thurka
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ba0df5e5-9053-6d9f-941f-f112716aa91a
+
+com-sun-tools-visualvm-jmx
+dir
+
+com-sun-tools-visualvm-application-views
+dir
+
+com-sun-tools-visualvm-tools
+dir
+
+com-sun-tools-visualvm-heapdump
+dir
+
+com-sun-tools-visualvm-application
+dir
+
+com-sun-tools-visualvm-api-caching
+dir
+
+com-sun-tools-visualvm-sa
+dir
+
+com-sun-tools-visualvm-sampler
+dir
+
+com-sun-tools-visualvm-attach
+dir
+
+com-sun-tools-visualvm-host-remote
+dir
+
+com-sun-tools-visualvm-modules-startup
+dir
+
+com-sun-tools-visualvm-host-views
+dir
+
+com-sun-tools-visualvm-uisupport
+dir
+
+com-sun-tools-visualvm-host
+dir
+
+com-sun-tools-visualvm-coredump
+dir
+
+com-sun-tools-visualvm-profiler
+dir
+
+com-sun-tools-visualvm-modules-appui
+dir
+
+com-sun-tools-visualvm-charts
+dir
+
+com-sun-tools-visualvm-jvmstat
+dir
+
+com-sun-tools-visualvm-core
+dir
+
+com-sun-tools-visualvm-profiling
+dir
+
+com-sun-tools-visualvm-jvm
+dir
+
+com-sun-tools-visualvm-threaddump
+dir
+

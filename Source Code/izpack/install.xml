@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<installation version="1.0">
+
+    <!-- 
+        The info section.
+        The meaning of the tags should be natural ...
+    -->
+    <info>
+        <appname>NASA's Asteroid Data Hunter</appname>
+        <appversion>1.0</appversion>
+    </info>
+
+    <!-- 
+        The gui preferences indication.
+        Sets the installer window to 640x480. It will not be able to change the size.
+    -->
+    <guiprefs width="640" height="480" resizable="no"/>
+
+    <!-- 
+        The locale section.
+        Asks here to include the English and French langpacks.
+    -->
+    <locale>
+        <langpack iso3="eng"/>
+    </locale>
+
+    <!-- 
+        The resources section.
+        The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
+    -->
+    <resources>
+        <res id="LicencePanel.licence" src="Licence.txt"/>
+        <res id="InfoPanel.info" src="Readme.txt"/>
+		<res src="Win_shortcutSpec.xml" id="Win_shortcutSpec.xml"/>
+		<res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
+    </resources>
+
+    <!-- 
+        The panels section.
+        We indicate here which panels we want to use. The order will be respected.
+    -->
+    <panels>
+		<panel classname="HelloPanel" />
+        <panel classname="InfoPanel"/>
+        <panel classname="LicencePanel"/>
+        <panel classname="TargetPanel"/>
+        <panel classname="PacksPanel"/>
+        <panel classname="InstallPanel"/>
+		<panel classname="ShortcutPanel"/>
+        <panel classname="SimpleFinishPanel"/>
+    </panels>
+
+    <!-- 
+        The packs section.
+        We specify here our packs.
+    -->
+    <packs>
+        <pack name="Asteroid Data Hunter Application" required="yes">
+            <description>The Application Files</description>
+             <file src="asteroid" targetdir="$INSTALL_PATH"/> 
+			 <file src="start.bat" targetdir="$INSTALL_PATH"/>
+			 <file src="start.sh" targetdir="$INSTALL_PATH"/>
+			<file src="logo.ico" targetdir="$INSTALL_PATH"/>
+			<file src="logo.png" targetdir="$INSTALL_PATH"/>
+        </pack>
+		<pack name="Asteroid Data Hunter Database" required="yes">
+            <description>The database and initial data</description>
+             <file src="data" targetdir="$INSTALL_PATH"/> 
+        </pack>
+		<pack name="Java Runtime Environment (JRE)" required="yes">
+            <description>The Java Runtime Environment</description>
+             <file src="jre" targetdir="$INSTALL_PATH"/> 
+        </pack>
+		<pack name="Asteroid Data Hunter Scripts" required="yes">
+			<description>Scripts</description>
+			<executable targetfile="$INSTALL_PATH/start.sh" stage="never" keep="true">
+				<os family="unix"/>
+			</executable>
+			<executable targetfile="$INSTALL_PATH/jre/bin/java" stage="never" keep="true">
+				<os family="unix"/>
+			</executable>
+			<executable targetfile="$INSTALL_PATH/jre/bin/javac" stage="never" keep="true">
+				<os family="unix"/>
+			</executable>
+			<executable targetfile="$INSTALL_PATH/asteroid/detector/detector" stage="never" keep="true">
+				<os family="unix"/>
+			</executable>
+		</pack>
+    </packs>
+	<native type="izpack" name="ShellLink.dll">
+		<os family="windows" />
+	</native>
+	<native type="izpack" name="ShellLink_x64.dll">
+		<os family="windows" />
+	</native>
+</installation>

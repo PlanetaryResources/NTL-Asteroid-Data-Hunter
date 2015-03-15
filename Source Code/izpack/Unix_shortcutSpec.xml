@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+This is the shortcut specification for windows. Its considered default so on
+Systems that are not shortcut compatible the information is taken from here.
+-->
+<shortcuts>
+<programGroup defaultName="Asteroid Data Hunter" location="applications"/>
+<shortcut
+    name = "Asteroid Data Hunter"
+    target = "$INSTALL_PATH/start.sh"
+    commandLine = ""
+    workingDirectory= "$INSTALL_PATH"
+    description="Asteroid Data Hunter"
+    iconFile="$INSTALL_PATH\logo.png"
+    iconIndex="0"
+    initialState="noShow"
+    programGroup="yes"
+    desktop="yes"
+    applications="yes"
+    startMenu="yes"
+    startup="yes"/>
+</shortcuts>

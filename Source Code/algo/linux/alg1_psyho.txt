@@ -1,0 +1,106 @@
+[Summary]
+
+My solution consists of 5 separate steps:
+1) Apply some basic image filters to preprocess the input FITS images and generate the "background" for each of the images
+2) Use a very naive heuristic in order to detect objects that could be separated from the background 
+3) Link objects together across different images to create a list of potential detections
+4) Extract features for each generated detection
+5) Use a Random Forest (RF) in order to estimate the value of each of those detections and order them accordingly
+
+Steps 1-4 are performed within solve(), while the RF part is done inside the AsteroidDetector class.
+
+This description is split into 2 parts. In the first one, I'm going through how my solution works, step by step. The second one consists of some random remarks/observations around the problem and/or my solution.
+
+
+[Image Preprocessing + Background Creation]
+
+All of the following computations are done for each of the images separately.
+
+Even though values outside the 16-bit range probably yield some additional information, I decided to convert them to 16-bit values, in order to speed up computations, reduce the memory usage.
+
+I create a "background" image. The background is created with a median filter using a 27x27 box centered around each pixel. Since such computations take a lot of time, I'm downscaling the original image by a factor of 3x - this temporary downscaling is performed only for background calculation. As far as I could tell, that downscaling didn't reduce the quality of my solution. This is performed in medianFilterFast().
+
+I compute the "foreground" image as a difference between original image and background image. After that step, I "stretch" the pixel range of the image in a similar way that was done in visualizer. This is a leftover from my first solution, but since rewriting this would require me to adjust all of the parameters in other parts of my code, I decided to leave it as it is and concentrate on other things. I can't tell if this stretching hurts or helps my solution. This is performed in stretchFilter().
+
+After all of those steps are done, I only work with the "stretched" image - original one is discarded and background is redundant.
+
+
+[Object Detection]
+
+I scan each image separately. Every 2x2 block where the average of that block goes above the certain threshold is treated as an "object" (i.e. something that can be distinguished from the background). Since it seems that all of the provided images have the same stddev of pixel ranges, I simply hardcoded the value for that threshold. This is performed in findObjects().
+
+
+[Object Linking]
+
+This is the most complex part of my solution, and at the same time, the weakest one. Although to be fair, much of its complexity comes from the fact that I tried to reduce the running time.
+
+The first part of object linking is to run a flood-fill (connected components) algorithm for every non-background object. This is one my the weakest points of my solution, because I essentially treat asteroids very close to (bright) stars as a single object and thus I'm unable to detect them. The simplest workaround would be to run a DFS only from brightest points and towards those which are same or less intensive, although it's not clear for me if that would improve the quality of my solution. During this step I also try to remove stationary objects (using a very crude techniques) to reduce the number of false detections.
+
+After the first part, I'm left with the coordinates of all of detected non-stationary objects (the centers are equal to weighted sum of coordinates for each found connected component).
+
+The linking is done as follows, I check every pair of two close objects that are present on two different images. I assume that asteroid moves in a straight line so I can compute the expected position on all 4 images, by using my two points. Then, I use another simple heuristic (based on pixel value in each of those 4 positions) to discard some of the possible asteroid detections. After that I simply add that asteroid detection to my list.
+
+Originally I tried to remove possible duplicate detections, but later I forfeited the idea. More on the duplicate detections in later parts of description.
+
+All of the above is performed in findMovingObjects().
+
+
+[Feature Extraction]
+
+For every detection I extract various features. In total there are 43 features extracted, but first 11 features just contain some additional data, and they are not used in RF. It's important to note, that I haven't done any detailed analysis of the importance of the computed features, so my insight on them might be severely off.
+
+I compute several features in the findMovingObjects() for objects - object size (in pixels), sum of object's pixel values and sum of object's pixel values divided by the maximal such sum from other 3 images. Overall the impact of those features is almost negligible and I'm not sure if they improve the solution at all.
+
+There are 7 features related to speed/direction of the movement. Total (euclidean) movement, RA-component movement, DEC-component movement, angle (atan2) of the movement, Total (euclidean) speed, RA-component speed, DEC-component speed. Movement means distance between 2 frames, while speed is means distance divided by the time passed. Time passed is calculated from DATE field from FITS headers. I believe the speed (mainly direction) is one of the most important features considering that almost all asteroids move in the same direction.
+
+There are several features not directly related to trajectory/image of an asteroid: time between frames, date, date (modulo year), RA, DEC.
+
+Lastly, there are 4 groups of features related to the brightness of the detected objects. Each group consists of 4 features - 1 feature from each frame. In order to make life easier for RF, the values within each group are sorted. Each of those features uses the brightness level (weighted average of pixels in 3x3 area) centered around the detection. Those 4 groups are: Brightness in original image; Brightness in "object image", which is original image with pixels set to zero at positions where no objects were detected; Minimum brightness at the same position, but calculated in other 3 images; Group #3 - Group #1. The first two groups are used mainly to see the brightness level of the two images that were not used during the object detection (remember that I used only 2 frames for that). The last two groups are mainly for excluding stationary objects.
+
+
+[Random Forest]
+
+I use a rather standard RF implementation similar to the one that can be find in Extremely Randomized Forest paper. The main difference is that I use a custom number of features/samples (instead of original |features|/1). When calculating the best split I use MCE (Mean Cubic Error) metric. All of the relevant attributes for my RF can be found in RandomForestConfig class.
+
+Since my algorithm generates too many detections for my RF to handle, I'm cutting down the number of "false" samples from each training image. This is because the false detections (i.e. samples that don't detect any valid asteroid) are less useful for training. Generally speaking, increasing the number of false detections (targetSamples constant in my code) and number of trees (TREES_NO constant) should give a bit better results, but at the cost of increased runtime and memory usage.
+
+
+[Glueing Everything Together]
+
+Training and testing phases are very similar. In both of them I perform steps 1-4 and generate a bunch of samples. Essentially each sample (row) belongs to one possible asteroid detection. 
+
+During the training phase, for each of the samples, I check if they're correct (do they identify an asteroid) and if the asteroid is considered a NEO. As mentioned in RF description, I'm downsampling the data that doesn't contain any valid detection. During the testing phase, I'm simply gathering all samples. Since, RF prediction is a much faster process than RF training I don't have to perform any downsampling during the testing period.
+
+The final result is calculated in a following way. I use my RF to estimate the probability that the sample contains a valid asteroid. I sort all of those predictions according to computed values. Then I'm just going through them one-by-one and add them to my final result. When processed detection is already very close to 2 different detections that were already added, I discard it. This is to ensure that I don't have too many duplicated results.
+
+
+------------------------------------------
+
+[WCS]
+
+Since original convertRADEC2XY() and convertXY2RADEC() functions were rather slow due to extensive use of trigonometrical functions, I decided to create my own function for coordinates conversion - convertCoord(). Instead of investing my time and learning how exactly WCS conversion should be done, I used a standard technique of creating a grid and interpolating everything in-between. The pre-computation of the grid is performed in createWCSData(). 
+
+My program doesn't handle coordinate wrapping too well. The most natural approach would be to do some additional processing to make sure that this never happens (for example by adding some contant to "wrapped" coordinates). Instead, I did a rather stupid thing, and I revert back to using original functions when the coordinates wrap around :)
+
+
+[NEO Detection]
+
+I ran out of time in order to do proper NEOs (NEAs?) detection. Locally, I created RF with the same features for NEO detection and checked the average precision score. Without any tweaking I got 8% score, which in theory could translate into 8K additional score (8% out of 100K). At the same time, I believe that due to how NEO scoring was done, the score obtained from average precision metric was probably the upper bound for potential gain, so that additional 8K was a very optimistic estimate. Due to those reasons, I didn't invest too much time into NEO detection.
+
+My original way of handling NEOs, was to just treat every returned object as NEO. In the end, I made a quick hack and added RF with NEO ground truth data (RFNeo object in my code). I used this RF to estimate the probability of each detection being a NEO and marked top 6 detections as NEOs and everything else as non-NEOs. Number 6 was chosen arbitrarily without any proper testing.
+
+Also, the problem with training data set was that it contained very little data on NEOs. With such little amount of data, machine learning techniques can't really shine.
+
+
+[Duplicate Asteroids]
+
+As you probably know, there were a lots of duplicated asteroids in the ground truth data. I'm pretty sure that at least some of them were genuine - when looking at the images I could distinguish two different objects that were very close together (although maybe it have been some optical effect?). But honestly, I'm not in position to give any meaningful opinion on what's the source of them.
+
+You've probably noticed a lot of sudden jumps in the leaderboard. I'm pretty sure that most of them (or all?) were related to a sudden discover that duplicating our results (returning each asteroid twice) gives a huge increase in our score. My jump from 270K to 360K was the addition of duplicating the results. My way of doing this was actually pretty simple - since my original algorithm often generated several samples for the same detection
+
+
+[Overall Quality]
+
+I believe that the biggest drawback of my solution is a flawed generation of detections. While I think that using median filter was a very good idea for generating background image, I definitely could use more image processing techniques in order to obtain better detection data. On the other hand, I believe that my RF part (along with feature extraction) works pretty good. So instead of having complex object detection routines, I opted for generating a lots of questionable detections, because my RF could usually correctly tell if something is a valid detection or not.
+
+Overall I'm quite happy with the results I got, especially considering my limited time that I could put into this competition (around 40-50h).   

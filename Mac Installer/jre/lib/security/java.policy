@@ -1,0 +1,82 @@
+
+// Standard extensions get all permissions by default
+
+grant codeBase "file:${{java.ext.dirs}}/*" {
+	permission java.security.AllPermission;
+};
+
+// MacOS X extensions START
+grant codeBase "file:${user.home}/Library/Java/Extensions/*" {
+	permission java.security.AllPermission;
+};
+
+grant codeBase "file:/Library/Java/Extensions/*" {
+	permission java.security.AllPermission;
+};
+
+grant codeBase "file:/System/Library/Java/Extensions/*" {
+	permission java.security.AllPermission;
+};
+
+grant codeBase "file:/Network/Library/Java/Extensions/*" {
+	permission java.security.AllPermission;
+};
+// MacOS X extensions END
+
+
+// default permissions granted to all domains
+
+grant { 
+	// Allows any thread to stop itself using the java.lang.Thread.stop()
+	// method that takes no argument.
+	// Note that this permission is granted by default only to remain
+	// backwards compatible.
+	// It is strongly recommended that you either remove this permission
+	// from this policy file or further restrict it to code sources
+	// that you specify, because Thread.stop() is potentially unsafe.
+	// See the API specification of java.lang.Thread.stop() for more
+        // information.
+	permission java.lang.RuntimePermission "stopThread";
+
+	// allows anyone to listen on un-privileged ports
+	permission java.net.SocketPermission "localhost:1024-", "listen";
+
+	// "standard" properies that can be read by anyone
+
+	permission java.util.PropertyPermission "java.version", "read";
+	permission java.util.PropertyPermission "java.vendor", "read";
+	permission java.util.PropertyPermission "java.vendor.url", "read";
+	permission java.util.PropertyPermission "java.class.version", "read";
+	permission java.util.PropertyPermission "os.name", "read";
+	permission java.util.PropertyPermission "os.version", "read";
+	permission java.util.PropertyPermission "os.arch", "read";
+	permission java.util.PropertyPermission "file.separator", "read";
+	permission java.util.PropertyPermission "path.separator", "read";
+	permission java.util.PropertyPermission "line.separator", "read";
+
+	permission java.util.PropertyPermission "java.specification.version", "read";
+	permission java.util.PropertyPermission "java.specification.vendor", "read";
+	permission java.util.PropertyPermission "java.specification.name", "read";
+
+	permission java.util.PropertyPermission "java.vm.specification.version", "read";
+	permission java.util.PropertyPermission "java.vm.specification.vendor", "read";
+	permission java.util.PropertyPermission "java.vm.specification.name", "read";
+	permission java.util.PropertyPermission "java.vm.version", "read";
+	permission java.util.PropertyPermission "java.vm.vendor", "read";
+	permission java.util.PropertyPermission "java.vm.name", "read";
+
+	// MacOSX properties START
+	// All properties documented in http://developer.apple.com/documentation/Java/Reference/Java14SysProperties/index.html
+	// can be set from an applet, or via the Java 1.4.2 Plugin Settings application.
+	permission java.util.PropertyPermission "apple.awt.*", "read, write";
+	permission java.util.PropertyPermission "apple.laf.*", "read, write";
+
+	// Apple-specific properties
+	permission java.util.PropertyPermission "mrj.version", "read";
+
+	// Deprecated properties for compatibility with Java 1.3.1
+	permission java.util.PropertyPermission "com.apple.macos.useScreenMenuBar", "read, write";
+	permission java.util.PropertyPermission "com.apple.hwaccel", "read, write";
+	// MacOSX properties END
+};
+
