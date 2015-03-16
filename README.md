@@ -9,5 +9,7 @@ The application contains a user interface that anyone can use without too much o
 
 Learn more about the project at: http://www.topcoder.com/asteroids
 
+NOTE: If you run into any issues, please do not hesitate to contact Rashid Sial (rsial@topcoder.com) for support, or to log a ticket in our GitHub repository.
+
 Thanks!
 -The NASA Tournament Lab
