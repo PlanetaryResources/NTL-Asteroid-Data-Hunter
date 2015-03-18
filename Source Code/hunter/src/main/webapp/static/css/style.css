@@ -295,6 +295,13 @@ a, a:hover, a:visited {
 	margin-top: 15px;
 }
 
+.dashboard-page .latest-result.centerbox {
+    width: 730px;
+    height: 580px;
+    margin: 15px auto 0px auto;
+    float: none;
+}
+
 .dashboard-page .search-history {
 	margin-top: 15px;
 	margin-right: 30px;

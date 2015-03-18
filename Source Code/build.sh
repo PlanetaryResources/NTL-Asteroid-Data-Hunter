@@ -29,7 +29,12 @@ cp start.sh "$distpath"/start.sh
 cp start.bat "$distpath"/start.bat
 
 echo Copy detector to $fulldir/detector
-cp algo/dist/* "$fulldir/detector/"
+if [[ "$OSTYPE" == "darwin"* ]];
+then
+    cp algo/dist/detector.mac "$fulldir/detector/detector"
+else
+    cp algo/dist/detector.ubuntu "$fulldir/detector/detector"
+fi
 
 dburl=jdbc:h2:file:$distpath/data/db/hunter
 # Build Tester

@@ -21,9 +21,12 @@ dburl=jdbc:h2:file:$dbdir/hunterdb;DB_CLOSE_DELAY=10
 if [ -f "$applicationpath/jre/bin/java" ] && [[ "$OSTYPE" != "darwin"* ]];
 then
 	export JAVA_HOME="$applicationpath/jre"
+elif [[ "$OSTYPE" == "darwin"* ]];
+then
+    export JAVA_HOME=`/usr/libexec/java_home`
 fi
 
 echo JAVA_HOME=$JAVA_HOME
 echo warurl=$warurl
 echo applicationpath=$applicationpath
-"$JAVA_HOME/bin/java" -classpath "$fulldir/run-jetty-1.0/lib/*" -Xms256m -Xmx1024m -XX:PermSize=128m -XX:MaxPermSize=1024m gov.nasa.asteroid.hunter.AsteroidHunterApplication "$warurl" "$datadir" "$fulldir/detector/detector"
+"$JAVA_HOME/bin/java" -classpath "$fulldir/run-jetty-1.0/lib/*" -Xms256m -Xmx2048m -XX:PermSize=128m -XX:MaxPermSize=2048m gov.nasa.asteroid.hunter.AsteroidHunterApplication "$warurl" "$datadir" "$fulldir/detector/detector"

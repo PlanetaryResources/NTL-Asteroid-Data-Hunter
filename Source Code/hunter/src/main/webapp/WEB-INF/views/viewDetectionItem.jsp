@@ -17,7 +17,7 @@
     var observationsMailBody = "${observationsMailBody}"
 </script>
         <div class="page-content dashboard-page">
-            <div class="round-box latest-result">
+            <div class="round-box latest-result centerbox">
                 <div class="latest-result-title"><img src="../i/latest-icon.png"/>SEARCH DETAILS<div class="constrast-slider">CONTRAST&nbsp;&nbsp;<div class="slider" ></div></div></div>
                 <div class="latest-result-content">
 
@@ -65,7 +65,7 @@
                     <p>No Recent Results</p>
                 </div>
             </div>
-            <div class="round-box submit-panel">
+            <div class="round-box submit-panel hidden">
                 <div class="submit-section-title"><img src="../i/submit-mpc.png"/>SUBMIT TO MPC</div>
                 <div class="submit-section-note red-text">Are you really sure to submit this?</div>
                 <div class="submit-item round-box">
