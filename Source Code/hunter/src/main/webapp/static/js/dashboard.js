@@ -33,9 +33,25 @@ $(document).ready(function() {
     	setProgressView(session.progress)
     }
     var currentProgress = 0
+    var progressSetDate = new Date()
     function setProgressView(progress) {
         if (currentProgress + 1e-10 >= 1) {
             return
+        }
+        if (progress > currentProgress) {
+            progressSetDate = new Date()
+        } else {
+            var now = new Date()
+            if (now.getTime() - progressSetDate.getTime() > 500 * 1000) {
+                // timeout
+                uploader.stopHunting()
+                alert('Process Time out')
+                $.removeCookie("currentUploadSessionID")
+                $.removeCookie("currentUploadProgress")
+                $('.upload-section').removeClass("hidden")
+                $('.progress-section').addClass("hidden")
+                return
+            }
         }
         currentProgress = progress
         $('.progress-bar').animate({
@@ -67,6 +83,7 @@ $(document).ready(function() {
         $('.upload-section').addClass("hidden")
         $('.progress-section').removeClass("hidden")
         currentProgress = 0
+        progressSetDate = new Date()
         setProgressView(0)
     }
 
@@ -136,6 +153,9 @@ $(document).ready(function() {
         }
         this.setHunting = function() {
             hunting = true
+        }
+        this.stopHunting = function() {
+            hunting = false
         }
         this.setSessionID = function(theSessionID) {
             sessionId = theSessionID

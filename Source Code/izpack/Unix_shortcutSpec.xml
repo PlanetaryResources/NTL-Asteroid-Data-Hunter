@@ -18,5 +18,5 @@ Systems that are not shortcut compatible the information is taken from here.
     desktop="yes"
     applications="yes"
     startMenu="yes"
-    startup="yes"/>
+    startup="no"/>
 </shortcuts>

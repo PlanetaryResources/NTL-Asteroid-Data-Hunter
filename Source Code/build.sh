@@ -32,8 +32,10 @@ echo Copy detector to $fulldir/detector
 if [[ "$OSTYPE" == "darwin"* ]];
 then
     cp algo/dist/detector.mac "$fulldir/detector/detector"
+    chmod +x "$fulldir/detector/detector"
 else
     cp algo/dist/detector.ubuntu "$fulldir/detector/detector"
+    chmod +x "$fulldir/detector/detector"
 fi
 
 dburl=jdbc:h2:file:$distpath/data/db/hunter

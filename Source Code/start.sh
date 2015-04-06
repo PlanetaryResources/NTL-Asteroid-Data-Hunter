@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 echo ------------------------------------------------------------------
 echo  Automatic deployment tool - Start
 echo  TCSASSEMBLER
@@ -29,4 +29,12 @@ fi
 echo JAVA_HOME=$JAVA_HOME
 echo warurl=$warurl
 echo applicationpath=$applicationpath
-"$JAVA_HOME/bin/java" -classpath "$fulldir/run-jetty-1.0/lib/*" -Xms256m -Xmx2048m -XX:PermSize=128m -XX:MaxPermSize=2048m gov.nasa.asteroid.hunter.AsteroidHunterApplication "$warurl" "$datadir" "$fulldir/detector/detector"
+
+#stop the existing apps
+INSTANCES=`ps aux | grep "java.*ASTEROID_APP"  | grep -v "grep" | awk '{print $2}'`
+for INSTANCE in $INSTANCES
+do
+    kill -9 $INSTANCE
+done
+
+"$JAVA_HOME/bin/java" -classpath "$fulldir/run-jetty-1.0/lib/*" -DASTEROID_APP -Xms256m -Xmx2048m -XX:PermSize=128m -XX:MaxPermSize=2048m gov.nasa.asteroid.hunter.AsteroidHunterApplication "$warurl" "$datadir" "$fulldir/detector/detector"
