@@ -5,7 +5,7 @@ Using the latest developments in machine learning algorithms, we have developed 
 
 
 DOWNLOAD THE APP
-The app is currently available for download for Windows (7.1+), Mac (10.10.X+) & Linux (Ubuntu) users. To download the app installers, please visit: http://www.topcoder.com/asteroids/asteroiddatahunter/
+The app is currently available for download for Windows (7.1+), Mac (10.10.X+) & Linux (Ubuntu) users. To download the app installers, please visit: https://sourceforge.net/projects/asteroiddatahunter/files/
 
 
 WHO SHOULD DOWNLOAD THE APP?
@@ -19,7 +19,7 @@ The app does not come pre-bundled with test images, or the ability to download s
 HOW DO I GET STARTED?
 1. Download the User Guide, and learn how to install, launch and upload images into the app
 2. Download sample images that you can use within the app for to test how it works.
-3. Download an installer to help install the app on your computer. Click here to download the app: http://www.topcoder.com/asteroids/asteroiddatahunter/
+3. Download an installer to help install the app on your computer. Click here to download the app: https://sourceforge.net/projects/asteroiddatahunter/files/
 
 
 WHAT DO I DO IF I HAVE ANY QUESTIONS OR FIND BUGS?
